@@ -8,3 +8,15 @@ Welcome to the card flip game.
   - Press 'Start Game' button when you are ready.
 
 If you do not want to download or run any codes, please see my screen shoot below.
+
+
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game01.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game02.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game03.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game04.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game05.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game06.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game07.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game08.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game09.png)
+![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game10.png)
