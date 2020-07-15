@@ -154,19 +154,21 @@ body {
   zoom: 0.6;
   margin-top: 40px;
   padding: 0px 100px;
-  border: 1px solid brown;
+  /* border: 1px solid brown; */
   width: 100vw;
 }
 
 .authorName, .authorEmail {
   color: #ff7070;
   margin-left: 20px;
+  margin-bottom: 30px;
 }
 
 .authorName:hover::after {
   content: "if your mouse stop here mean you like my project";
   margin-left: 20px;
   color: pink;
+  background-color: #ffffff;
   border-top-color: lightgreen;
   border-right-color: red;
   border-bottom-color: burlywood;
@@ -185,6 +187,10 @@ body {
 
 marquee > p > a {
   margin-left: 20px;
+}
+
+marquee > p {
+  margin-bottom: 10px;
 }
 
 a {
