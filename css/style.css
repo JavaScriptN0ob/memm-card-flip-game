@@ -149,4 +149,54 @@ body {
   background-image: url("./icons/aws.svg");
 }
 
+
+.author {
+  zoom: 0.6;
+  margin-top: 40px;
+  padding: 0px 100px;
+  border: 1px solid brown;
+  width: 100vw;
+}
+
+.authorName, .authorEmail {
+  color: #ff7070;
+  margin-left: 20px;
+}
+
+.authorName:hover::after {
+  content: "if your mouse stop here mean you like my project";
+  margin-left: 20px;
+  color: pink;
+  border-top-color: lightgreen;
+  border-right-color: red;
+  border-bottom-color: burlywood;
+  border-left-color: purple;
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-right-width: 2px;
+  border-right-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-left-width: 2px;
+  border-left-style: solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+marquee > p > a {
+  margin-left: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  border: 1px solid transparent;
+  background-color: #007cc2;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+a:hover {
+  background-color: #005485;
+}
 /*# sourceMappingURL=style.css.map */
