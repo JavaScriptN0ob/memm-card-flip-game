@@ -18,10 +18,11 @@ const game = {
   score: 0,
   level: 1,
   timer: 60,
-  timerDisplay: null,
+  timerDisplay: 60,
   scoreDisplay: null,
   levelDisplay: null,
-  timerInterval: null,
+  // timerInterval: null,
+  // and much more
   startButton: document.querySelector('.game-stats__button'),
   gameBoard: document.querySelector('.game-board'),
   cardFlippedCount: 0,
@@ -31,7 +32,7 @@ const game = {
   timer60Level1: null,
   timer60Level2: null,
   timer60Level3: null,
-  // and much more
+  
 };
 
 const bugList = {
@@ -54,7 +55,7 @@ function hack() {
 }
 
 function startGame() {
-  const { startButton, gameBoard } = game;
+  const { startButton } = game;
   startButton.addEventListener('click', () => {
     // console.log('game started');
     if(startButton.innerHTML === 'End Game') {
@@ -69,6 +70,7 @@ function startGame() {
       // console.log(level);
       // console.log(score);
       startButton.innerHTML = 'End Game'
+      game.cardFlippedCount = 0;
       firstLevel();
       handleCardFlip();
       updateTimerDisplay();
@@ -93,14 +95,15 @@ function handleCardFlip() {
   card.forEach((card) => {
     card.addEventListener('click', () => {
       // console.log(100, cardFlippedCount)
-      if(cardFlippedCount < 2) {
+      // console.log(200, game.cardFlippedCount)
+      if(game.cardFlippedCount < 2) {
         if(card.classList.contains('card--flipped') && !card.classList.contains('succeeded')) {
           card.classList.remove('card--flipped');
-          cardFlippedCount -= 1;
+          game.cardFlippedCount -= 1;
           // console.log(cardFlippedCount);
         } else {
           card.classList.add('card--flipped');
-          cardFlippedCount += 1;
+          game.cardFlippedCount += 1;
           // console.log(cardFlippedCount);
           // console.log('you flip this card');
           let cardArray = [];
@@ -111,7 +114,7 @@ function handleCardFlip() {
               // console.log(1, cardArray[0].classList[1])
               // console.log(2, cardArray[1].classList[1])
               if(cardArray[0].classList[1] === cardArray[1].classList[1]) {
-                console.log('you success one pair of card, try the rest');
+                // console.log('you success one pair of card, try the rest');
                 updateScore();
                 game.succeededPair += 1;
                 jumpLevel();
@@ -126,7 +129,7 @@ function handleCardFlip() {
                 // console.log(`current score is ${game.score}`);
                 // console.log(`current level is ${game.level}`);
                 // console.log(`time left is ${game.timerDisplay}S`);
-                cardFlippedCount = 0;
+                game.cardFlippedCount = 0;
                 cardArray = [];
                 // console.log(1,cardArray)
               }
@@ -138,8 +141,8 @@ function handleCardFlip() {
                 let cardReFlipTimer = setTimeout(() => {
                   card1.classList.remove('card--flipped');
                   card2.classList.remove('card--flipped');
-                  cardFlippedCount = 0;
-                }, 1500)
+                  game.cardFlippedCount = 0;
+                }, 1000)
                 cardArray = [];
                 // clearInterval(cardReFlipTimer);
               }
@@ -147,11 +150,11 @@ function handleCardFlip() {
           })
         }
       } else {
-        console.log('reached max card flip number')
+        // console.log('reached max card flip number')
         if(card.classList.contains('card--flipped')) {
           card.classList.remove('card--flipped');
-          cardFlippedCount -= 1;
-          console.log(cardFlippedCount);
+          game.cardFlippedCount -= 1;
+          // console.log(cardFlippedCount);
         }
       }
     })
@@ -203,6 +206,7 @@ function firstLevel() {
           <div class="card__face card__face--back"></div>
         </div>`
       );
+  randomCards();
 }
 
 function secondLevel() {
@@ -274,6 +278,7 @@ function secondLevel() {
           <div class="card__face card__face--back"></div>
         </div>`
     );
+  randomCards();
 }
 
 function thirdLevel() {
@@ -425,6 +430,13 @@ function thirdLevel() {
           <div class="card__face card__face--back"></div></div>
         </div>`
       );
+  randomCards();
+}
+
+function clearAllTimerInterval() {
+  clearInterval(game.timer60Level1);
+  clearInterval(game.timer60Level2);
+  clearInterval(game.timer60Level3);
 }
 
 function handleGameOver() {
@@ -432,7 +444,24 @@ function handleGameOver() {
   alert(`your score is ${game.score}`);
   game.score = 0;
   game.level = 1;
+  game.cardFlippedCount = 2;
   resetGameStats();
+}
+
+function randomCards() {
+  const { gameBoard } = game;
+  let cards = document.querySelectorAll('.card');
+  let randomNumber = () => {
+    return Math.random() > 0.5 ? -1 : 1
+  };
+  let gameBoardArray = [];
+  for (let i = 0; i < cards.length; i++) {
+    gameBoardArray.push(cards[i]);
+  }
+  gameBoardArray.sort(randomNumber);
+  for(let j = 0; j < gameBoardArray.length; j++) {
+    gameBoard.appendChild(gameBoardArray[j]);
+  }
 }
 
 /*******************************************
@@ -466,9 +495,7 @@ function updateTimerDisplay() {
   // timerBar = game.timerBar;
   // timer = game.timer;
   if(game.level === 1) { 
-    clearInterval(game.timer60Level1);
-    clearInterval(game.timer60Level2);
-    clearInterval(game.timer60Level3);
+    clearAllTimerInterval();
     timer60Level1 = setInterval(() => {
       if(timer > 0) {
         timer -= 1;
@@ -485,9 +512,7 @@ function updateTimerDisplay() {
     game.timer60Level1 = timer60Level1;
   }
   else if (game.level === 2) {
-    clearInterval(game.timer60Level1);
-    clearInterval(game.timer60Level2);
-    clearInterval(game.timer60Level3);
+    clearAllTimerInterval();
     timer60Level2 = setInterval(() => {
       if(timer > 0) {
         timer -= 1;
@@ -504,9 +529,7 @@ function updateTimerDisplay() {
     game.timer60Level2 = timer60Level2;
   }
   else if (game.level === 3) {
-    clearInterval(game.timer60Level1);
-    clearInterval(game.timer60Level2);
-    clearInterval(game.timer60Level3);
+    clearAllTimerInterval();
     timer60Level3 = setInterval(() => {
       if(timer > 0) {
         timer -= 1;
