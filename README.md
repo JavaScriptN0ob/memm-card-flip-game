@@ -21,10 +21,10 @@ If you do not want to download or run any codes, please see my screen shoot belo
 ![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game09.png)
 ![image](https://github.com/JavaScriptN0ob/memm-card-flip-game/blob/master/resource/github-intro-images/card-game10.png)
 
-updates on 16.07.2020:
-  All cards now will randomly replaced at every time you start different levels, it becomes harder.
-  Re-program JS file for a better & stable work.
-  Devided programs into more smaller size function, to acheive a better maintainable and reuseable purpose.
-  Key binds function will be added shortly.
+`updates on 16.07.2020:
+  `All cards now will randomly replaced at every time you start different levels, it becomes harder.
+  `Re-program JS file for a better & stable work.
+  `Devided programs into more smaller size function, to acheive a better maintainable and reuseable purpose.
+  `Key binds function will be added shortly.
   
-  Wenpei Z
+  `Wenpei Z
