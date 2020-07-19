@@ -26,5 +26,11 @@ If you do not want to download or run any codes, please see my screen shoot belo
   - Re-program JS file for a better & stable work.
   - Devided programs into more smaller size function, to acheive a better maintainable and reuseable purpose.
   - Key binds function will be added shortly.
+
+`updates on 19.07.2020:`
+  - Using function to create element in parentNode gameBoard.
+  - Using NodeClone to clone element to create a pair of cards.
+  - update on intervals to save RAM and get better performance.
+  - still have minor problem on keyBind and removeEventListener.
   
   `Wenpei Z`
