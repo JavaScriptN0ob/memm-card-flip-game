@@ -21,7 +21,7 @@ const game = {
   timerDisplay: 60,
   scoreDisplay: null,
   levelDisplay: null,
-  // timerInterval: null,
+  timerInterval: null,
   // and much more
   startButton: document.querySelector('.game-stats__button'),
   gameBoard: document.querySelector('.game-board'),
@@ -29,16 +29,7 @@ const game = {
   // card: document.querySelectorAll('.card'),
   timerBar: document.querySelector('.game-timer__bar'),
   succeededPair: 0,
-  timer60Level1: null,
-  timer60Level2: null,
-  timer60Level3: null,
-  
 };
-
-const bugList = {
-  1: `handleCardFlip必须在startGame内运行，因为游戏开始时找不到带有game-board的元素，并且不能用解构赋值的方法解gameObj`,
-  2: `timer async`
-}
 
 setGame();
 
@@ -60,9 +51,7 @@ function startGame() {
     // console.log('game started');
     if(startButton.innerHTML === 'End Game') {
       handleGameOver();
-      clearInterval(game.timer60Level1);
-      clearInterval(game.timer60Level2);
-      clearInterval(game.timer60Level3);
+      clearInterval(game.timerInterval);
       game.succeededPair = 0;
       startButton.innerHTML = 'Start Game';
     }
@@ -80,9 +69,7 @@ function startGame() {
 
 function restartGame() {
   const { startButton } = game;
-  clearInterval(game.timer60Level1);
-  clearInterval(game.timer60Level2);
-  clearInterval(game.timer60Level3);
+  clearInterval(game.timerInterval);
   game.succeededPair = 0;
   startButton.innerHTML = 'Start Game';
   resetGameStats();
@@ -90,7 +77,6 @@ function restartGame() {
 }
 
 function handleCardFlip() {
-  let { score, level, timer, timerDisplay, cardFlippedCount } = game;
   let card = document.querySelectorAll('.card');
   card.forEach((card) => {
     card.addEventListener('click', () => {
@@ -108,6 +94,8 @@ function handleCardFlip() {
           // console.log('you flip this card');
           let cardArray = [];
           document.querySelectorAll('.card--flipped').forEach( (card) => {
+            // console.log(1,card)
+            // console.log(2, card.getAttribute('data-tech'))
             cardArray.push(card);
             if(cardArray.length>1) {
               // console.log(cardArray);
@@ -125,6 +113,12 @@ function handleCardFlip() {
                 cardArray[1].classList.add('succeeded');
                 cardArray[0].classList.remove('card--flipped');
                 cardArray[1].classList.remove('card--flipped');
+                   /* -------------------------------------------
+                -- Because I did not use KeyBind function,  --
+                -- So I could not using removeEventListener --
+                -- method at this stage to stop card flip   --
+                --------------------------------------------*/
+
                 // console.log(`you got ${score} points`);
                 // console.log(`current score is ${game.score}`);
                 // console.log(`current level is ${game.level}`);
@@ -161,6 +155,31 @@ function handleCardFlip() {
   })
 };
 
+function createCards(className) {
+  let newCard = document.createElement('div');
+  newCard.classList.add('card');
+  newCard.classList.add(`${className}`);
+  newCard.setAttribute('data-tech', `${className}`);
+  let newCardFront = document.createElement('div')
+  newCardFront.classList.add('card__face');
+  newCardFront.classList.add('card__face--front');
+  let newCardBack = document.createElement('div');
+  newCardBack.classList.add('card__face');
+  newCardBack.classList.add('card__face--back');
+  newCard.append(newCardFront, newCardBack);
+  return newCard;
+}
+
+function cloneExistCard() {
+  const { gameBoard } = game;
+  gameBoard.childNodes.forEach(
+    (card) => {
+      cardClone = card.cloneNode(true);
+      gameBoard.append(cardClone);
+    }
+  )
+}
+
 function nextLevel(succeededPair) {
   if(succeededPair === 0) {
     firstLevel();
@@ -185,263 +204,68 @@ function jumpLevel() {
   }
 }
 
+
 function firstLevel() {
   const { gameBoard } = game;
   gameBoard.style = 'grid-template-columns: 1fr 1fr;'
-      gameBoard.innerHTML = (
-        `<div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>`
-      );
+  gameBoard.innerHTML = null;
+  gameBoard.append(
+    createCards('css3'),
+    createCards('html5'),
+  )
+  cloneExistCard();
   randomCards();
 }
 
 function secondLevel() {
   const { gameBoard } = game;
   gameBoard.style = 'grid-template-columns: repeat(4, 1fr);'
-    gameBoard.innerHTML = (
-      `<div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>`
-    );
+  gameBoard.innerHTML = null;
+  gameBoard.append(
+    createCards('css3'),
+    createCards('nodejs'),
+    createCards('html5'),
+    createCards('react'),
+    createCards('heroku'),
+    createCards('sass'),
+    createCards('js'),
+    createCards('linkedin'),
+  )
+  cloneExistCard();
   randomCards();
 }
 
 function thirdLevel() {
   const { gameBoard } = game;
   gameBoard.style = 'grid-template-columns: repeat(6, 1fr);'
-      gameBoard.innerHTML = (
-        `<div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front">
-          </div><div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card aws" data-tech="aws">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card react" data-tech="react">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card sass" data-tech="sass">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card aws" data-tech="aws">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card css3" data-tech="css3">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card js" data-tech="js">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card nodejs" data-tech="nodejs">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-          <div class="card github" data-tech="github">
-          <div class="card__face card__face--front"></div>
-        <div class="card__face card__face--back"></div>
-        </div>
-          <div class="card html5" data-tech="html5">
-          <div class="card__face card__face--front"></div>
-        <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card heroku" data-tech="heroku">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card github" data-tech="github">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div>
-        </div>
-        <div class="card linkedin" data-tech="linkedin">
-          <div class="card__face card__face--front"></div>
-          <div class="card__face card__face--back"></div></div>
-        </div>`
-      );
+  gameBoard.innerHTML = null;
+  gameBoard.append(
+    createCards('css3'), 
+    createCards('nodejs'),
+    createCards('html5'),
+    createCards('react'),
+    createCards('heroku'),
+    createCards('sass'),
+    createCards('js'),
+    createCards('linkedin'),
+    createCards('aws'),
+    createCards('github'),
+    createCards('css3'), 
+    createCards('nodejs'),
+    createCards('html5'),
+    createCards('react'),
+    createCards('heroku'),
+    createCards('sass'),
+    createCards('js'),
+    createCards('aws'),
+  )
+  cloneExistCard();
   randomCards();
-}
-
-function clearAllTimerInterval() {
-  clearInterval(game.timer60Level1);
-  clearInterval(game.timer60Level2);
-  clearInterval(game.timer60Level3);
 }
 
 function handleGameOver() {
   let { score, level } =game;
-  alert(`your score is ${game.score}`);
+  alert(`your score is ${game.score} and you failed on level ${game.level}`);
   game.score = 0;
   game.level = 1;
   game.cardFlippedCount = 2;
@@ -476,7 +300,6 @@ function updateScore() {
 }
 
 function updateLevel() {
-  let { level } = game;
   let levelDisplay = document.querySelector('.game-stats__level--value');
   levelDisplay.innerHTML = game.level += 1;
 }
@@ -489,62 +312,22 @@ function resetGameStats() {
 }
 
 function updateTimerDisplay() {
-  let { score, timer, timerDisplay, timerBar, timer60Level1, timer60Level2 } = game;
-  // const timerBar = document.querySelector('.game-timer__bar');
-  // let timer = 60;
-  // timerBar = game.timerBar;
-  // timer = game.timer;
-  if(game.level === 1) { 
-    clearAllTimerInterval();
-    timer60Level1 = setInterval(() => {
-      if(timer > 0) {
-        timer -= 1;
-        // console.log(`${timer/60*100}`);
-        timerBar.style = `width: ${timer/60*100}%`;
-        timerBar.innerHTML = `${timer}S`;
-        game.timerDisplay = timer;
-      } else {
-        restartGame();
-        handleGameOver();
-        // nextLevel();
-      }
-    }, 1000);
-    game.timer60Level1 = timer60Level1;
-  }
-  else if (game.level === 2) {
-    clearAllTimerInterval();
-    timer60Level2 = setInterval(() => {
-      if(timer > 0) {
-        timer -= 1;
-        // console.log(`${timer/60*100}`);
-        timerBar.style = `width: ${timer/60*100}%`;
-        timerBar.innerHTML = `${timer}S`;
-        game.timerDisplay = timer;
-      } else {
-        restartGame();
-        handleGameOver();
-        // nextLevel();
-      }
-    }, 1000);
-    game.timer60Level2 = timer60Level2;
-  }
-  else if (game.level === 3) {
-    clearAllTimerInterval();
-    timer60Level3 = setInterval(() => {
-      if(timer > 0) {
-        timer -= 1;
-        // console.log(`${timer/60*100}`);
-        timerBar.style = `width: ${timer/60*100}%`;
-        timerBar.innerHTML = `${timer}S`;
-        game.timerDisplay = timer;
-      } else {
-        restartGame();
-        handleGameOver();
-        // nextLevel();
-      }
-    }, 1000);
-    game.timer60Level3 = timer60Level3;
-  }
+  let { timer,  timerBar,} = game;
+  clearInterval(game.timerInterval)
+  game.timerInterval = setInterval(() => {
+    if(timer > 0) {
+      timer -= 1;
+      // console.log(`${timer/60*100}`);
+      timerBar.style = `width: ${timer/60*100}%`;
+      timerBar.innerHTML = `${timer}S`;
+      game.timerDisplay = timer;
+    } else {
+      restartGame();
+      handleGameOver();
+      // nextLevel();
+    }
+  }, 1000);
+  
 }
 
 /*******************************************
